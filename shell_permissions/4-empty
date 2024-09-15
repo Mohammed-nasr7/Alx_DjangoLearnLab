@@ -1,2 +1,2 @@
-#!/bim/bash
-touch hello
+#!/bin/bash
+touch hello 
