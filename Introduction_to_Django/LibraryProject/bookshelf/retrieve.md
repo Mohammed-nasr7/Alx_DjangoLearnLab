@@ -1,7 +1,7 @@
 
-from bookshelf.models import Book
+# Retrieve Operation
 
-
-books = Book.objects.all()
-for book in books:
-    print(f"Title: {book.title}, Author: {book.author}, Year: {book.publication_year}")
+```python
+# Retrieve the book instance
+book = Book.objects.get(id=book.id)
+book.title, book.author, book.publication_year  # Expected output: ("1984", "George Orwell", 1949)
