@@ -20,7 +20,7 @@ def home(request):
 def list_books(request):
     # Retrieve all books
     books = Book.objects.all()
-    context= {'book_list':books}
+    context= {'books': books}
     return render(request,'relationship_app/list_books.html', context )
     # Render the list using a template
     
