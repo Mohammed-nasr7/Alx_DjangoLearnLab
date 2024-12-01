@@ -32,20 +32,15 @@ class BookDetailView(generics.RetrieveAPIView):
 class BookCreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated]  # Only authenticated users can create
+    permission_classes = [IsAuthenticated] 
 
 class BookUpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated]  # Only authenticated users can update
+    permission_classes = [IsAuthenticated]  
 
 class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAuthenticated]  # Only authenticated users can delete
+    permission_classes = [IsAuthenticated]  
 
-# BookListView: Handles retrieval of all books. Allows unauthenticated access.
-# BookDetailView: Handles retrieval of a specific book by ID. Allows unauthenticated access.
-# BookCreateView: Handles creation of new books. Restricted to authenticated users.
-# BookUpdateView: Handles updates to existing books. Restricted to authenticated users.
-# BookDeleteView: Handles deletion of books. Restricted to authenticated users.
