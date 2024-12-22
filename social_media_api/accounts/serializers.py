@@ -1,32 +1,39 @@
+
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
 
-# استيراد النموذج المخصص للمستخدم
-CustomUser = get_user_model()
 
-class UserSerializer(serializers.ModelSerializer):
-    # تعريف الحقول التي سيتم استخدامها في النموذج
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
     class Meta:
-        model = CustomUser
-        fields = ('username', 'password', 'email', 'bio', 'profile_picture')
+        model = get_user_model()
+        fields = ['username', 'email', 'password']
 
-    # تأكد من أن كلمة المرور مشفرة
     def create(self, validated_data):
-        # استخدام create_user لإنشاء مستخدم آمن
-        user = CustomUser.objects.create_user(**validated_data)
-        # إنشاء توكن مرتبط بالمستخدم
-        Token.objects.create(user=user)
+        user = get_user_model().objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
         return user
 
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
-    password = serializers.CharField()
+    password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        # التحقق من صحة اسم المستخدم وكلمة المرور
         user = authenticate(username=data['username'], password=data['password'])
         if user is None:
             raise serializers.ValidationError('Invalid credentials')
-        return {'user': user}
+        return data
+
+    def create(self, validated_data):
+        user = authenticate(username=validated_data['username'], password=validated_data['password'])
+        token, created = Token.objects.create(user=user)
+        return {
+            'token': token.key
+        }
