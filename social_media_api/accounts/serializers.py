@@ -1,6 +1,6 @@
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
-from django.contrib.auth import get_user_model, authenticate
 
 # استيراد النموذج المخصص للمستخدم
 CustomUser = get_user_model()
@@ -13,9 +13,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     # تأكد من أن كلمة المرور مشفرة
     def create(self, validated_data):
-        user = CustomUser.objects.create_user(**validated_data)  # استخدام create_user لإنشاء مستخدم آمن
-        Token.objects.create(user=user)  # إنشاء توكن مرتبط بالمستخدم
+        # استخدام create_user لإنشاء مستخدم آمن
+        user = CustomUser.objects.create_user(**validated_data)
+        # إنشاء توكن مرتبط بالمستخدم
+        Token.objects.create(user=user)
         return user
+
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
